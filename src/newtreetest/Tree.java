@@ -22,6 +22,9 @@ public class Tree {
     }
     
     public void moveP1(Board board){
+        
+        ArrayList<Move> moves = new ArrayList<>();
+        
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
                 if(board.boardStates[i][j] == BoardState.P1){
@@ -33,12 +36,22 @@ public class Tree {
                     moveP2(board);
                 }else{
                     //determine the best move
+                    Move bestMove = moves.get(0);//new Move();
+                    for(int k = 0; k < moves.size(); k++){//check the size
+                        if(moves.get(k).value > bestMove.value){
+                            bestMove = moves.get(k);
+                        }
+                    }
+                    
                 }
             }
         }
     }
     
     public void moveP2(Board board){
+        
+        ArrayList<Move> moves = new ArrayList<>();
+        
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
                 if(board.boardStates[i][j] == BoardState.P2){
@@ -50,6 +63,12 @@ public class Tree {
                     moveP1(board);
                 }else{
                     //determine the best move
+                    Move bestMove = moves.get(0);//new Move();
+                    for(int k = 0; k < moves.size(); k++){//check the size
+                        if(moves.get(k).value < bestMove.value){
+                            bestMove = moves.get(k);
+                        }
+                    }
                 }
             }
         }
@@ -65,15 +84,15 @@ public class Tree {
         //each regular piece has two possible moves. each king has four...
         //need to check if the move would be outside of the board... is that necessary??
         
-        //ArrayList<Board> possibleOutcomes = new ArrayList<>();
         /*if i do it like this, i have an array of the finished boards, so i 
-        can find which outcome is best, but i lose the move that lead there. if i 
+        can find which outcome is best, but i lose the move that lead there. if i
         had a class just for move though, it would only contain a board and maybe
         a player whose turn it was? just containing info, no methods :/ */
         //list
         ArrayList<Move> possibleMoves = new ArrayList<>();
-        //Move move = new Move();
+        
         //umm so am i keeping track of all of the moves or just the best?
+        //i think maybe return them all, and sort through in the move method
         possibleMoves.add(0, new Move());
         if(board.boardStates[pieceX-1][pieceY+1] == BoardState.EMPTY){ /*kinda choppy 
             because it only works for one side of the board (moving down)*/
