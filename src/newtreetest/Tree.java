@@ -21,74 +21,53 @@ public class Tree {
         player = _player;
     }
     
-    public void moveP1(Board board){
+    public void movePlayer(Board board, int playerType){
+        ArrayList<Move> possibleMoves = findAllMoves(board);
         
+        Move bestMove = possibleMoves.get(0);
+        
+        for(int i = 1; i < possibleMoves.size(); i++){
+            if(possibleMoves.get(i).value > bestMove.value){
+                bestMove = possibleMoves.get(i);
+            }
+        }
+        board = bestMove.board; //check
+    }
+    
+    public ArrayList<Move> findAllMoves(Board board, int playerType){
         ArrayList<Move> moves = new ArrayList<>();
         
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
-                if(board.boardStates[i][j] == BoardState.P1){
-                    findMovesP1(board, i, j);
-                }else if(board.boardStates[i][j] == BoardState.P1K){
-                    findMovesKing(board, i, j);
+                if(board.boardStates[i][j] != BoardState.EMPTY){
+                    findMoves(board, i, j);
                 }
                 if(board.checkGameState() == WinnerState.UNFINISHED){
-                    moveP2(board);
+                    movePlayer(board, playerType*(-1)); //switch turn
                 }else{
-                    //determine the best move
-                    Move bestMove = moves.get(0);//new Move();
-                    for(int k = 0; k < moves.size(); k++){//check the size
-                        if(moves.get(k).value > bestMove.value){
-                            bestMove = moves.get(k);
-                        }
-                    }
-                    
+                    moves.add(new Move(board));
                 }
             }
         }
+        return moves;
     }
     
-    public void moveP2(Board board){
+    public void findMoves(Board board, int x, int y){
         
-        ArrayList<Move> moves = new ArrayList<>();
-        
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                if(board.boardStates[i][j] == BoardState.P2){
-                    findMovesP2(board, i, j);
-                }else if(board.boardStates[i][j] == BoardState.P2K){
-                    findMovesKing(board, i, j);
-                }
-                if(board.checkGameState() == WinnerState.UNFINISHED){
-                    moveP1(board);
-                }else{
-                    //determine the best move
-                    Move bestMove = moves.get(0);//new Move();
-                    for(int k = 0; k < moves.size(); k++){//check the size
-                        if(moves.get(k).value < bestMove.value){
-                            bestMove = moves.get(k);
-                        }
-                    }
-                }
-            }
+        if(board.boardStates[x][y] == BoardState.P1){
+           
+        }else if(board.boardStates[x][y] == BoardState.P2){
+           
+        }else if(board.boardStates[x][y] == BoardState.P1K){
+           
+        }else if(board.boardStates[x][y] == BoardState.P1K){
+           
         }
+        
     }
     
-    public void findMovesP1(Board board, int pieceX, int pieceY){
-        //should it return an array of moves
-    }
-    
-    //seems a little silly to have a method for P1, P2 and king...
     public void findMovesP2(Board board, int pieceX, int pieceY){
-        //keep the board with the highest value... maybe store the value under the board!
-        //each regular piece has two possible moves. each king has four...
-        //need to check if the move would be outside of the board... is that necessary??
         
-        /*if i do it like this, i have an array of the finished boards, so i 
-        can find which outcome is best, but i lose the move that lead there. if i
-        had a class just for move though, it would only contain a board and maybe
-        a player whose turn it was? just containing info, no methods :/ */
-        //list
         ArrayList<Move> possibleMoves = new ArrayList<>();
         
         //umm so am i keeping track of all of the moves or just the best?
@@ -114,11 +93,6 @@ public class Tree {
         }else if(board.checkGameState() == WinnerState.UNFINISHED){
             
         }
-        
-    }
-    
-    public void findMovesKing(Board board, int pieceX, int pieceY){
-        
     }
     
 }
