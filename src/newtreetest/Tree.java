@@ -22,7 +22,7 @@ public class Tree {
     }
     
     public void movePlayer(Board board, int playerType){
-        ArrayList<Move> possibleMoves = findAllMoves(board);
+        ArrayList<Move> possibleMoves = findAllMoves(board, playerType);
         
         Move bestMove = possibleMoves.get(0);
         
@@ -32,67 +32,84 @@ public class Tree {
             }
         }
         board = bestMove.board; //check
+        board.updateBoard();
+        
     }
     
-    public ArrayList<Move> findAllMoves(Board board, int playerType){
-        ArrayList<Move> moves = new ArrayList<>();
+    public Move findBestMove(Board board){
+        Move bestMove;
         
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
                 if(board.boardStates[i][j] != BoardState.EMPTY){
-                    findMoves(board, i, j);
+                    ArrayList<Move> moves = findFutureMoves(board, i, j);
+                    for(int k = 0; k < moves.size(); k++){
+                        
+                    }
+                }
+            }
+        }
+        
+        return bestMove;
+    }
+    
+    public ArrayList<Move> findFutureMoves(Board board, int x, int y){
+        //i only really need to check through half the board. half will be empty
+        ArrayList<Move> moves = new ArrayList<>();
+        /*
+                if(board.boardStates[i][j] != BoardState.EMPTY){
+                    findMoves(board, board.getPieceType(board.boardStates[i][j]), i, j);
                 }
                 if(board.checkGameState() == WinnerState.UNFINISHED){
-                    movePlayer(board, playerType*(-1)); //switch turn
+                    movePlayer(board, playerType *(-1)); //switch turn
                 }else{
                     moves.add(new Move(board));
+                }
+        }*/ //restructure
+        return moves;
+    }
+    
+    public ArrayList<Move> findMoves(Board board, int playerType, int x, int y){
+        //this is almost good
+        ArrayList<Move> moves = new ArrayList<>();
+        
+        for(int i = -1; i <= 1; i+=2){
+            for(int j = -1; j <= 1; j+=2){
+                if(board.boardStates[x+i][y+j] == BoardState.EMPTY){
+                    if(!outOfBounds()){
+                        moves.add(0, new Move(board));
+                        if(becomeKing()){
+                            if(playerType == 1){
+                                moves.get(0).board.boardStates[x+i][y+j] = BoardState.P1K;
+                            }else if(playerType == -1){
+                                moves.get(0).board.boardStates[x+i][y+j] = BoardState.P2K;
+                            }
+                        }else{
+                            moves.get(0).board.boardStates[x+i][y+j] = board.boardStates[x][y];
+                        }
+                        moves.get(0).board.boardStates[x][y] = BoardState.EMPTY;
+                    }
+                }else if(board.getPieceType(board.boardStates[x+i][y+j]) != playerType){
+                    checkJump(); //i guess i need to check for jumping in three directions from where i land.
                 }
             }
         }
         return moves;
     }
     
-    public void findMoves(Board board, int x, int y){
-        
-        if(board.boardStates[x][y] == BoardState.P1){
-           
-        }else if(board.boardStates[x][y] == BoardState.P2){
-           
-        }else if(board.boardStates[x][y] == BoardState.P1K){
-           
-        }else if(board.boardStates[x][y] == BoardState.P1K){
-           
-        }
-        
+    public boolean checkJump(){
+        //?
+        return true;
     }
     
-    public void findMovesP2(Board board, int pieceX, int pieceY){
+    public boolean outOfBounds(){
+        //?
+        return false;
+    }
+    
+    public boolean becomeKing(){
         
-        ArrayList<Move> possibleMoves = new ArrayList<>();
-        
-        //umm so am i keeping track of all of the moves or just the best?
-        //i think maybe return them all, and sort through in the move method
-        possibleMoves.add(0, new Move());
-        if(board.boardStates[pieceX-1][pieceY+1] == BoardState.EMPTY){ /*kinda choppy 
-            because it only works for one side of the board (moving down)*/
-            board.boardStates[pieceX][pieceY] = BoardState.EMPTY;
-            board.boardStates[pieceX-1][pieceY+1] = BoardState.P2;
-            possibleMoves.get(0).board.boardStates = board.boardStates;/*kinda gotta 
-            check to make sure this is updating the correct boards 'cause they are both called board*/
-            //findMovesP2(board, pieceX-1, pieceY+1);//but need to have P1 move first
-        }if(board.boardStates[pieceX+1][pieceY+1] == BoardState.EMPTY){
-            board.boardStates[pieceX][pieceY] = BoardState.EMPTY;
-            board.boardStates[pieceX+1][pieceY+1] = BoardState.P2;
-            possibleMoves.get(0).board.boardStates = board.boardStates;
-        }
-        //this should be the stopping statement... ?
-        if(board.checkGameState() == WinnerState.PLAYER_1_WINS){
-            possibleMoves.get(0).value = board.findValue();
-        }else if(board.checkGameState() == WinnerState.PLAYER_2_WINS){
-            possibleMoves.get(0).value = board.findValue();
-        }else if(board.checkGameState() == WinnerState.UNFINISHED){
-            
-        }
+        return false;
     }
     
 }

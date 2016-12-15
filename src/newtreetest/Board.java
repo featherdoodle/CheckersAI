@@ -17,27 +17,30 @@ public class Board {
     }
     
     public BoardState[][] boardStates = new BoardState[8][8];
-    //public int boardValue;
     
     public Board(){
-        for(int i = 0; i < 2; i++){
-            for(int j = 0; j < 8; j++){
-                boardStates[i][j] = BoardState.P2;
-            }
+        //this part here can probs be done better
+        for(int j = 0; j < 8; j+=2){
+            boardStates[0][j] = BoardState.P2;
+            boardStates[0][j+1] = BoardState.EMPTY;
+        }
+        for(int j = 0; j < 8; j+=2){
+            boardStates[1][j] = BoardState.EMPTY;
+            boardStates[1][j+1] = BoardState.P2;
         }
         for(int i = 2; i < 6; i++){
             for(int j = 0; j < 8; j++){
                 boardStates[i][j] = BoardState.EMPTY;
             }
         }
-        for(int i = 6; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                boardStates[i][j] = BoardState.P1;
-            }
+        for(int j = 0; j < 8; j+=2){
+            boardStates[6][j] = BoardState.P1;
+            boardStates[6][j+1] = BoardState.EMPTY;
         }
-        
-        //boardValue = 0;
-        
+        for(int j = 0; j < 8; j+=2){
+            boardStates[7][j] = BoardState.EMPTY;
+            boardStates[7][j+1] = BoardState.P1;
+        }
     }
     
     public Board(BoardState[][] _boardStates){
@@ -61,7 +64,6 @@ public class Board {
                 }
             }
             System.out.println();
-            
         }
     }
     
@@ -99,6 +101,24 @@ public class Board {
         }else{
             return 0;
         }
+    }
+    
+    public int findValue(){ //positive value means good for P1, neg means good for P2
+        int score = 0;
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                if(boardStates[i][j] == Board.BoardState.P1){
+                    score++;
+                }else if(boardStates[i][j] == Board.BoardState.P2){
+                    score--;
+                }else if(boardStates[i][j] == Board.BoardState.P1K){
+                    score += 3;
+                }else if(boardStates[i][j] == Board.BoardState.P2K){
+                    score -= 3;
+                }
+            }
+        }
+        return score;
     }
     
 }
