@@ -36,36 +36,44 @@ public class Tree {
         
     }
     
-    public Move findBestMove(Board board){
-        Move bestMove;
+    public Move findBestMove(ArrayList<Move> moves){
+        Move bestMove = moves.get(0);
         
+        for(int k = 0; k < moves.size(); k++){
+            if(moves.get(k).value > bestMove.value){
+                bestMove = moves.get(k);
+            }
+        }        
+        return bestMove;
+    }
+    
+    public void findFutureMoves(Board board, int playerType){
+        //. while board is unfinsihed, keep finding 
+        //allMoves. bak in forth for turns (*-1) when it is finished, set the value
+        while(true){
+            ArrayList<Move> moves = findAllMoves(board, playerType*(-1));
+            while(board.checkGameState() == WinnerState.UNFINISHED){
+                findAllMoves(board, playerType*(-1));
+            }
+            //set value
+        }
+        
+    }
+    
+    public ArrayList<Move> findAllMoves(Board board, int playerType){
+        ArrayList<Move> moves = new ArrayList<>();
+        
+        //the only point of this method is to iterate through the whole board
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
-                if(board.boardStates[i][j] != BoardState.EMPTY){
-                    ArrayList<Move> moves = findFutureMoves(board, i, j);
-                    for(int k = 0; k < moves.size(); k++){
-                        
+                if(board.getPieceType(board.boardStates[i][j]) == playerType){
+                    ArrayList<Move> pieceMoves = findMoves(board, playerType, i, j);
+                    for(int k = 0; k < pieceMoves.size(); k++){
+                        moves.add(pieceMoves.get(k));
                     }
                 }
             }
         }
-        
-        return bestMove;
-    }
-    
-    public ArrayList<Move> findFutureMoves(Board board, int x, int y){
-        //i only really need to check through half the board. half will be empty
-        ArrayList<Move> moves = new ArrayList<>();
-        /*
-                if(board.boardStates[i][j] != BoardState.EMPTY){
-                    findMoves(board, board.getPieceType(board.boardStates[i][j]), i, j);
-                }
-                if(board.checkGameState() == WinnerState.UNFINISHED){
-                    movePlayer(board, playerType *(-1)); //switch turn
-                }else{
-                    moves.add(new Move(board));
-                }
-        }*/ //restructure
         return moves;
     }
     
@@ -91,6 +99,7 @@ public class Tree {
                     }
                 }else if(board.getPieceType(board.boardStates[x+i][y+j]) != playerType){
                     checkJump(); //i guess i need to check for jumping in three directions from where i land.
+                    //while the moves are more than one, check jump
                 }
             }
         }
@@ -98,7 +107,7 @@ public class Tree {
     }
     
     public boolean checkJump(){
-        //?
+        //fedrggessgeSGDS
         return true;
     }
     

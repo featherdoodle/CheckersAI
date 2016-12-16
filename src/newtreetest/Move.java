@@ -21,7 +21,7 @@ public class Move {
     public Move(Board _board){
         board = _board;
         //player = _player; not sure if player should be included here
-        value = board.findValue();
+        //value = board.findValue();
     }
     
     
