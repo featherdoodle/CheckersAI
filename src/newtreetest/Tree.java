@@ -22,7 +22,7 @@ public class Tree {
     }
     
     public void movePlayer(Board board, int playerType){
-        ArrayList<Move> possibleMoves = findAllMoves(board, playerType);
+        ArrayList<Move> possibleMoves = getFinalMoves(board, playerType);
         
         Move bestMove = possibleMoves.get(0);
         
@@ -36,7 +36,7 @@ public class Tree {
         
     }
     
-    public Move findBestMove(ArrayList<Move> moves){
+    public Move getBestMove(ArrayList<Move> moves){
         Move bestMove = moves.get(0);
         
         for(int k = 0; k < moves.size(); k++){
@@ -47,27 +47,28 @@ public class Tree {
         return bestMove;
     }
     
-    public void findFutureMoves(Board board, int playerType){
+    public ArrayList<Move> getFinalMoves(Board board, int playerType){
         //. while board is unfinsihed, keep finding 
         //allMoves. bak in forth for turns (*-1) when it is finished, set the value
-        while(true){
-            ArrayList<Move> moves = findAllMoves(board, playerType*(-1));
-            while(board.checkGameState() == WinnerState.UNFINISHED){
-                findAllMoves(board, playerType*(-1));
-            }
-            //set value
-        }
         
+        ArrayList<Move> moves = getAllMoves(board, playerType*(-1));
+        for(int i = 0; i < moves.size(); i++){
+            while(moves.get(i).board.checkGameState() == WinnerState.UNFINISHED){
+                getAllMoves(board, playerType*(-1));
+            }
+            moves.get(i).value = moves.get(i).board.findValue();
+        }
+        return moves;
     }
     
-    public ArrayList<Move> findAllMoves(Board board, int playerType){
+    public ArrayList<Move> getAllMoves(Board board, int playerType){
         ArrayList<Move> moves = new ArrayList<>();
         
         //the only point of this method is to iterate through the whole board
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
                 if(board.getPieceType(board.boardStates[i][j]) == playerType){
-                    ArrayList<Move> pieceMoves = findMoves(board, playerType, i, j);
+                    ArrayList<Move> pieceMoves = getMoves(board, playerType, i, j);
                     for(int k = 0; k < pieceMoves.size(); k++){
                         moves.add(pieceMoves.get(k));
                     }
@@ -76,8 +77,8 @@ public class Tree {
         }
         return moves;
     }
-    
-    public ArrayList<Move> findMoves(Board board, int playerType, int x, int y){
+    //finds moves for a specific piece
+    public ArrayList<Move> getMoves(Board board, int playerType, int x, int y){
         //this is almost good
         ArrayList<Move> moves = new ArrayList<>();
         
