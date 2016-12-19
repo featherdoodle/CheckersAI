@@ -15,4 +15,6 @@ public abstract class Player {
     //should player contain a boolean for their turn and also the pieces
     //int[][] pieces; //was this suppost to be the coordinates of the pieces?
     
+    public abstract void move();
+    
 }

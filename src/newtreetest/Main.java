@@ -6,6 +6,7 @@
 
 package newtreetest;
 
+
 /**
  *
  * @author SyBye8898
@@ -17,7 +18,11 @@ public class Main {
      */
     public static void main(String[] args) {
         Board board = new Board();
-        board.updateBoard();
+        
+    }
+    
+    public static void step(){
+        
     }
     
 }

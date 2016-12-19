@@ -12,5 +12,11 @@ package newtreetest;
  */
 public class AIPlayer extends Player{
     
+    //should probably contain something... like pieces or turn?
+    
+    @Override
+    public void move(){
+        //basically just call the tree method movePlayer
+    }
     
 }

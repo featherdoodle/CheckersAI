@@ -41,6 +41,8 @@ public class Board {
             boardStates[7][j] = BoardState.EMPTY;
             boardStates[7][j+1] = BoardState.P1;
         }
+        
+        updateBoard();
     }
     
     public Board(BoardState[][] _boardStates){
