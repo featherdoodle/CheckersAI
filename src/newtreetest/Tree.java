@@ -85,7 +85,7 @@ public class Tree {
         for(int i = -1; i <= 1; i+=2){
             for(int j = -1; j <= 1; j+=2){
                 if(board.boardStates[x+i][y+j] == BoardState.EMPTY){
-                    if(!outOfBounds()){
+                    if(!outOfBounds(x+i, y+j)){
                         moves.add(0, new Move(board));
                         if(becomeKing()){
                             if(playerType == 1){
@@ -99,7 +99,7 @@ public class Tree {
                         moves.get(0).board.boardStates[x][y] = BoardState.EMPTY;
                     }
                 }else if(board.getPieceType(board.boardStates[x+i][y+j]) != playerType){
-                    checkJump(); //i guess i need to check for jumping in three directions from where i land.
+                    //checkJump(); //i guess i need to check for jumping in three directions from where i land.
                     //while the moves are more than one, check jump
                 }
             }
@@ -107,12 +107,21 @@ public class Tree {
         return moves;
     }
     
-    public boolean checkJump(){
-        //fedrggessgeSGDS
+    public boolean checkJump(Board board, int playerType, int x, int y){
+        for(int i = -1; i <= 1; i+=2){
+            for(int j = -1; j <= 1; j+=2){
+                if(Board.getPieceType(board.boardStates[x+i][y+j]) == playerType*(-1)){
+                    if(board.boardStates[x+(2*i)][y+(2*j)] == BoardState.EMPTY){
+                        
+                    }
+                }
+            }
+        }
+                
         return true;
     }
     
-    public boolean outOfBounds(){
+    public boolean outOfBounds(int x, int y){
         //?
         return false;
     }
