@@ -31,7 +31,7 @@ public class Tree {
                 bestMove = possibleMoves.get(i);
             }
         }
-        board = bestMove.board; //check
+        board = bestMove.board; //check if this works
         board.updateBoard();
         
     }
@@ -81,13 +81,13 @@ public class Tree {
     public ArrayList<Move> getMoves(Board board, int playerType, int x, int y){
         //this is almost good
         ArrayList<Move> moves = new ArrayList<>();
-        
+        //allows the pieces to move in all four directions whether they are regular or not :/
         for(int i = -1; i <= 1; i+=2){
             for(int j = -1; j <= 1; j+=2){
                 if(board.boardStates[x+i][y+j] == BoardState.EMPTY){
                     if(!outOfBounds(x+i, y+j)){
                         moves.add(0, new Move(board));
-                        if(becomeKing()){
+                        if(becomeKing()){ 
                             if(playerType == 1){
                                 moves.get(0).board.boardStates[x+i][y+j] = BoardState.P1K;
                             }else if(playerType == -1){
@@ -107,18 +107,21 @@ public class Tree {
         return moves;
     }
     
-    public boolean checkJump(Board board, int playerType, int x, int y){
+    public ArrayList<Move> jump(Board board, int playerType, int x, int y){
+        ArrayList<Move> moves = new ArrayList<>();
         for(int i = -1; i <= 1; i+=2){
             for(int j = -1; j <= 1; j+=2){
                 if(Board.getPieceType(board.boardStates[x+i][y+j]) == playerType*(-1)){
                     if(board.boardStates[x+(2*i)][y+(2*j)] == BoardState.EMPTY){
-                        
+                        //go through possible jumps, new move only when jump returns nothing
+                        moves.add(0, new Move(board));
+                        moves.get(0).board.boardStates[x+(2*i)][y+(2*j)] = moves.get(0).board.boardStates[x+i][y+j];
                     }
                 }
             }
         }
                 
-        return true;
+        return moves;
     }
     
     public boolean outOfBounds(int x, int y){
